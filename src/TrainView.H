@@ -58,6 +58,24 @@ class CTrack;
 
 // this uses the old ArcBall Code
 #include "Utilities/ArcBallCam.H"
+#include "RenderUtilities/TextureCube.h"
+#include <vector>
+
+class plane
+{
+public:
+	VAO* instance = nullptr;
+	void draw();
+	void generateVAO();
+};
+
+class waterPlane
+{
+public:
+	VAO* instance = nullptr;
+	void draw();
+	void generateVAO();
+};
 
 class TrainView : public Fl_Gl_Window
 {
@@ -86,6 +104,11 @@ class TrainView : public Fl_Gl_Window
 
 		//set ubo
 		void setUBO();
+
+		void drawCube(glm::mat4 model = glm::mat4(), bool useTexture = true);
+
+		void drawBackground();
+		
 	public:
 		ArcBallCam		arcball;			// keep an ArcBall for the UI
 		int				selectedCube;  // simple - just remember which cube is selected
@@ -94,8 +117,12 @@ class TrainView : public Fl_Gl_Window
 		CTrack*			m_pTrack;		// The track of the entire scene
 
 		Shader* shader		= nullptr;
+		Shader* backgroundShader = nullptr;
+
 		Texture2D* texture	= nullptr;
-		VAO* plane			= nullptr;
+		TextureCube* skybox = nullptr;
+
+		//VAO* plane			= nullptr;
 		UBO* commom_matrices= nullptr;
 
 		//OpenAL
@@ -105,6 +132,5 @@ class TrainView : public Fl_Gl_Window
 		ALCcontext* context = nullptr;
 		ALuint source;
 		ALuint buffer;
-
-
+		plane aPlane;
 };

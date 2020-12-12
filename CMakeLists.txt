@@ -12,6 +12,7 @@ set(SRC_SHADER
 set(SRC_RENDER_UTILITIES
     ${SRC_DIR}RenderUtilities/BufferObject.h
     ${SRC_DIR}RenderUtilities/Shader.h
+    ${SRC_DIR}RenderUtilities/TextureCube.h
     ${SRC_DIR}RenderUtilities/Texture.h)
 
 include_directories(${INCLUDE_DIR})

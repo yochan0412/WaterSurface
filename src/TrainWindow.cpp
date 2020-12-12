@@ -83,16 +83,19 @@ TrainWindow(const int x, const int y)
 		// camera buttons - in a radio button group
 		Fl_Group* camGroup = new Fl_Group(600,pty,195,20);
 		camGroup->begin();
+
 		worldCam = new Fl_Button(605, pty, 60, 20, "World");
         worldCam->type(FL_RADIO_BUTTON);		// radio button
         worldCam->value(1);			// turned on
         worldCam->selection_color((Fl_Color)3); // yellow when pressed
 		worldCam->callback((Fl_Callback*)damageCB,this);
+
 		trainCam = new Fl_Button(670, pty, 60, 20, "Train");
         trainCam->type(FL_RADIO_BUTTON);
         trainCam->value(0);
         trainCam->selection_color((Fl_Color)3);
 		trainCam->callback((Fl_Callback*)damageCB,this);
+
 		topCam = new Fl_Button(735, pty, 60, 20, "Top");
         topCam->type(FL_RADIO_BUTTON);
         topCam->value(0);
@@ -104,43 +107,62 @@ TrainWindow(const int x, const int y)
 
 		// browser to select spline types
 		// TODO: make sure these choices are the same as what the code supports
-		splineBrowser = new Fl_Browser(605,pty,120,75,"Spline Type");
-		splineBrowser->type(2);		// select
-		splineBrowser->callback((Fl_Callback*)damageCB,this);
-		splineBrowser->add("Linear");
-		splineBrowser->add("Cardinal Cubic");
-		splineBrowser->add("Cubic B-Spline");
-		splineBrowser->select(2);
+		WaterBrowser = new Fl_Browser(605,pty,120,75,"Wave Type");
+		WaterBrowser->type(2);		// select
+		WaterBrowser->callback((Fl_Callback*)damageCB,this);
+		WaterBrowser->add("Sine Wave");
+		WaterBrowser->add("Heightmap");
+		WaterBrowser->add("Simulation");
+		WaterBrowser->select(1);
 
 		pty += 110;
 
+		
+
+		Amp = new Fl_Value_Slider(675, pty, 120, 20, "Amplitude");
+		Amp->range(0, 1.0);
+		Amp->value(0.10);
+		Amp->align(FL_ALIGN_LEFT);
+		Amp->type(FL_HORIZONTAL);
+
+		pty += 30;
+
+		WaveL = new Fl_Value_Slider(675, pty, 120, 20, "Wavelength");
+		WaveL->range(0, 1.0);
+		WaveL->value(0.50);
+		WaveL->align(FL_ALIGN_LEFT);
+		WaveL->type(FL_HORIZONTAL);
+
+		pty += 30;
+
+
 		// add and delete points
-		Fl_Button* ap = new Fl_Button(605,pty,80,20,"Add Point");
+		/*Fl_Button* ap = new Fl_Button(605,pty,80,20,"Add Point");
 		ap->callback((Fl_Callback*)addPointCB,this);
 		Fl_Button* dp = new Fl_Button(690,pty,80,20,"Delete Point");
-		dp->callback((Fl_Callback*)deletePointCB,this);
+		dp->callback((Fl_Callback*)deletePointCB,this);*/
 
-		pty += 25;
+	    //pty += 25;
 		// reset the points
-		resetButton = new Fl_Button(735,pty,60,20,"Reset");
+		/*resetButton = new Fl_Button(735,pty,60,20,"Reset");
 		resetButton->callback((Fl_Callback*)resetCB,this);
 		Fl_Button* loadb = new Fl_Button(605,pty,60,20,"Load");
 		loadb->callback((Fl_Callback*) loadCB, this);
 		Fl_Button* saveb = new Fl_Button(670,pty,60,20,"Save");
-		saveb->callback((Fl_Callback*) saveCB, this);
+		saveb->callback((Fl_Callback*) saveCB, this);*/
 
-		pty += 25;
+		//pty += 25;
 		// roll the points
-		Fl_Button* rx = new Fl_Button(605,pty,30,20,"R+X");
+		/*Fl_Button* rx = new Fl_Button(605,pty,30,20,"R+X");
 		rx->callback((Fl_Callback*)rpxCB,this);
 		Fl_Button* rxp = new Fl_Button(635,pty,30,20,"R-X");
 		rxp->callback((Fl_Callback*)rmxCB,this);
 		Fl_Button* rz = new Fl_Button(670,pty,30,20,"R+Z");
 		rz->callback((Fl_Callback*)rpzCB,this);
 		Fl_Button* rzp = new Fl_Button(700,pty,30,20,"R-Z");
-		rzp->callback((Fl_Callback*)rmzCB,this);
+		rzp->callback((Fl_Callback*)rmzCB,this);*/
 
-		pty+=30;
+		//pty+=30;
 
 		// TODO: add widgets for all of your fancier features here
 #ifdef EXAMPLE_SOLUTION
@@ -198,19 +220,10 @@ advanceTrain(float dir)
 	//#####################################################################
 	// TODO: make this work for your train
 	//#####################################################################
-#ifdef EXAMPLE_SOLUTION
+
 	// note - we give a little bit more example code here than normal,
 	// so you can see how this works
 
-	if (arcLength->value()) {
-		float vel = ew.physics->value() ? physicsSpeed(this) : dir * (float)speed->value();
-		world.trainU += arclenVtoV(world.trainU, vel, this);
-	} else {
-		world.trainU +=  dir * ((float)speed->value() * .1f);
-	}
+	this->m_Track.trainU += this->speed->value() * 0.01 * dir;
 
-	float nct = static_cast<float>(world.points.size());
-	if (world.trainU > nct) world.trainU -= nct;
-	if (world.trainU < 0) world.trainU += nct;
-#endif
 }

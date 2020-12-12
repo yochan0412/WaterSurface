@@ -125,7 +125,7 @@ setProjection(bool doClear)
 
   // Compute the aspect ratio so we don't distort things
   double aspect = ((double) wind->w()) / ((double) wind->h());
-  gluPerspective(fieldOfView, aspect, .1, 1000);
+  gluPerspective(fieldOfView, aspect, .1, 10000);
 
   // Put the camera where we want it to be
   glMatrixMode(GL_MODELVIEW);
@@ -190,7 +190,7 @@ handle(int e)
 			};
 			break;
 		case FL_MOUSEWHEEL: {
-			float zamt = (Fl::event_dy() < 0) ? 1.1f : 1/1.1f;
+			float zamt = (Fl::event_dy() > 0) ? 1.1f : 1/1.1f;
 			eyeZ *= zamt;
 			wind->damage(1);
 			return 1;
